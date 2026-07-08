@@ -10,7 +10,7 @@ app.use(express.json())
 
 const PORT = process.env.PORT || 3000;
 
-REDIRECT_URI = `http://localhost:${PORT}/oauth2callback`
+REDIRECT_URI = `https://googleoauthserver-production.up.railway.app/oauth2callback`
 
 
 const oauth2Client = new google.auth.OAuth2(
