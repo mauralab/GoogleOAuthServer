@@ -3,7 +3,7 @@ const express = require("express");
 const { google } = require("googleapis");
 const fs = require("fs");
 
-const { pool, InsertGoogleAccount, InsertSource, getCredentialsByUserId, getSourcesByYTId, deleteSource, deleteAllSources,deleteAccount } = require('./db.js')
+const { pool, InsertGoogleAccount, InsertSource, getCredentialsByUserId, getSourcesByYTId, deleteSource, deleteAllSources,deleteAccount,InsertUploadDefaults } = require('./db.js')
 
 const app = express();
 app.use(express.json())
@@ -18,13 +18,10 @@ const oauth2Client = new google.auth.OAuth2(
   process.env.CLIENT_SECRET,
   REDIRECT_URI
 );
-
 const SCOPES = ["https://www.googleapis.com/auth/youtube.upload",
   "https://www.googleapis.com/auth/userinfo.email",
   "https://www.googleapis.com/auth/userinfo.profile",
 ];
-
-
 app.get("/auth", (req, res) => {
 
   const tg_id = req.query.tg_id;
@@ -116,9 +113,25 @@ app.delete("/source", async (req, res) => {
   }
 })
 
+app.post("/upload_defaults",async (req,res)=>{
+  try {
+    const { yt_id, title, description } = req.body;
+
+    console.log(yt_id, title, description)
+
+    await InsertUploadDefaults(yt_id, title, description);
+
+    return res.send("Ok");
+  } catch (e) {
+    console.error(e);
+    return res.status(500).send("Fail");
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`Server running: http://localhost:${PORT}`);
   console.log(`Start auth flow at: http://localhost:${PORT}/auth`);
+  //downloadTikTokVideo("https://www.tiktok.com/@susasupa/video/7503130179124858134");
 });
 
 

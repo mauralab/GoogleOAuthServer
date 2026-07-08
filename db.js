@@ -1,10 +1,10 @@
 const db = require("mysql2/promise");
 
 const pool = db.createPool({
-    host: "localhost",
-    user: "mik",
-    password: "11211121",
-    database: "tgbot",
+    host: "sql7.freesqldatabase.com",
+    user: "sql7832546",
+    password: "CCiKNuVXc8",
+    database: "sql7832546",
 });
 
 async function InsertGoogleAccount(user_id, tokens, profile) {
@@ -29,6 +29,14 @@ async function InsertSource(yt_id, link) {
     await pool.execute(`INSERT INTO tiktok_sources (yt_id,link) 
         VALUES (?,?)`, [yt_id, link])
 }
+async function InsertUploadDefaults(yt_id, title,description) {
+    await pool.execute(`INSERT INTO upload_defaults (yt_id,title,description) 
+        VALUES (?,?,?)
+          ON DUPLICATE KEY UPDATE
+            title = VALUES(title),
+            description = VALUES(description)`, [yt_id, title,description])
+}
+
 async function getSourcesByYTId(yt_id) {
     const [rows] = await pool.execute(`
         SELECT google_email, google_name, tiktok_sources.link 
@@ -66,4 +74,4 @@ async function getCredentialsByEmail(email) {
 }
 
 
-module.exports = { pool, InsertGoogleAccount, getCredentialsByUserId, InsertSource, getSourcesByYTId, deleteSource,deleteAllSources,deleteAccount }
+module.exports = { pool, InsertGoogleAccount, getCredentialsByUserId, InsertSource, getSourcesByYTId, deleteSource,deleteAllSources,deleteAccount,InsertUploadDefaults }
