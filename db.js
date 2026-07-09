@@ -34,7 +34,7 @@ async function InsertUploadDefaults(yt_id, title,description) {
         VALUES (?,?,?,?)
           ON DUPLICATE KEY UPDATE
             title = VALUES(title),
-            description = VALUES(description)`, [yt_id, title,description, new Date()])
+            description = VALUES(description)`, [yt_id, title,description, new Date(Date.now() + 2 * 60 * 60 * 1000)])
 }
 
 async function getSourcesByYTId(yt_id) {
