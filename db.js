@@ -30,11 +30,11 @@ async function InsertSource(yt_id, link) {
         VALUES (?,?)`, [yt_id, link])
 }
 async function InsertUploadDefaults(yt_id, title,description) {
-    await pool.execute(`INSERT INTO upload_defaults (yt_id,title,description) 
-        VALUES (?,?,?)
+    await pool.execute(`INSERT INTO upload_defaults (yt_id,title,description,last_upload) 
+        VALUES (?,?,?,?)
           ON DUPLICATE KEY UPDATE
             title = VALUES(title),
-            description = VALUES(description)`, [yt_id, title,description])
+            description = VALUES(description)`, [yt_id, title,description, new Date()])
 }
 
 async function getSourcesByYTId(yt_id) {

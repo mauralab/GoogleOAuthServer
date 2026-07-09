@@ -3,6 +3,8 @@ const express = require("express");
 const { google } = require("googleapis");
 const fs = require("fs");
 
+const path = require("path")
+
 const { pool, InsertGoogleAccount, InsertSource, getCredentialsByUserId, getSourcesByYTId, deleteSource, deleteAllSources,deleteAccount,InsertUploadDefaults } = require('./db.js')
 
 const app = express();
@@ -51,10 +53,10 @@ app.get("/oauth2callback", async (req, res) => {
 
     await InsertGoogleAccount(tg_id, tokens, profile)
 
-    res.send("✅ Authorization successful! You can close this tab.");
+    res.sendFile(path.join(__dirname,"public","success.html"));
   } catch (err) {
     console.error("Error exchanging code for tokens:", err);
-    res.status(500).send("Authentication failed");
+    res.status(500).sendFile(path.join(__dirname,"public","fail.html"));
   }
 });
 
