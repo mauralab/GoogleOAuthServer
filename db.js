@@ -26,15 +26,15 @@ async function InsertGoogleAccount(user_id, tokens, profile) {
 }
 
 async function InsertSource(yt_id, link) {
-    await pool.execute(`INSERT INTO tiktok_sources (yt_id,link) 
-        VALUES (?,?)`, [yt_id, link])
+    await pool.execute(`INSERT INTO tiktok_sources (yt_id,link,last_upload) 
+        VALUES (?,?,?)`, [yt_id, link, new Date(Date.now() + 2 * 60 * 60 * 1000)])
 }
 async function InsertUploadDefaults(yt_id, title,description) {
-    await pool.execute(`INSERT INTO upload_defaults (yt_id,title,description,last_upload) 
-        VALUES (?,?,?,?)
+    await pool.execute(`INSERT INTO upload_defaults (yt_id,title,description) 
+        VALUES (?,?,?)
           ON DUPLICATE KEY UPDATE
             title = VALUES(title),
-            description = VALUES(description)`, [yt_id, title,description, new Date(Date.now() + 2 * 60 * 60 * 1000)])
+            description = VALUES(description)`, [yt_id, title,description])
 }
 
 async function getSourcesByYTId(yt_id) {
