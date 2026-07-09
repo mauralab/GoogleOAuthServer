@@ -5,7 +5,7 @@ const fs = require("fs");
 
 const path = require("path")
 
-const { pool, InsertGoogleAccount, InsertSource, getCredentialsByUserId, getSourcesByYTId, deleteSource, deleteAllSources,deleteAccount,InsertUploadDefaults } = require('./db.js')
+const { pool, InsertGoogleAccount, InsertSource, getCredentialsByUserId, getSourcesByYTId, deleteSource, deleteAllSources, deleteAccount, InsertUploadDefaults, InsertUploadLimit } = require('./db.js')
 
 const app = express();
 app.use(express.json())
@@ -53,10 +53,10 @@ app.get("/oauth2callback", async (req, res) => {
 
     await InsertGoogleAccount(tg_id, tokens, profile)
 
-    res.sendFile(path.join(__dirname,"public","success.html"));
+    res.sendFile(path.join(__dirname, "public", "success.html"));
   } catch (err) {
     console.error("Error exchanging code for tokens:", err);
-    res.status(500).sendFile(path.join(__dirname,"public","fail.html"));
+    res.status(500).sendFile(path.join(__dirname, "public", "fail.html"));
   }
 });
 
@@ -67,12 +67,12 @@ app.get("/user/:id", async (req, res) => {
   const data = await getCredentialsByUserId(id);
   res.send(data)
 })
-app.delete("/user",async (req,res)=>{
+app.delete("/user", async (req, res) => {
   try {
-    const {account_id,chat_id} = req.body;
+    const { account_id, chat_id } = req.body;
 
-    await deleteAccount(account_id,chat_id)
-    
+    await deleteAccount(account_id, chat_id)
+
     return res.send("Ok")
   } catch (e) {
     console.error(e)
@@ -103,9 +103,9 @@ app.post("/source", async (req, res) => {
 app.delete("/source", async (req, res) => {
   try {
     const { yt_id, link } = req.body;
-    if(link){
+    if (link) {
       await deleteSource(yt_id, link)
-    }else{
+    } else {
       await deleteAllSources(yt_id)
     }
     return res.send("Ok")
@@ -115,13 +115,28 @@ app.delete("/source", async (req, res) => {
   }
 })
 
-app.post("/upload_defaults",async (req,res)=>{
+app.post("/upload_defaults", async (req, res) => {
   try {
     const { yt_id, title, description } = req.body;
 
     console.log(yt_id, title, description)
 
     await InsertUploadDefaults(yt_id, title, description);
+
+    return res.send("Ok");
+  } catch (e) {
+    console.error(e);
+    return res.status(500).send("Fail");
+  }
+})
+
+app.post("/upload_limit", async (req, res) => {
+  try {
+    const { yt_id, limit } = req.body;
+
+    console.log(yt_id, limit)
+
+    await InsertUploadLimit(yt_id, limit);
 
     return res.send("Ok");
   } catch (e) {
