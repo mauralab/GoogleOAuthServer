@@ -37,11 +37,11 @@ async function InsertUploadDefaults(yt_id, title, description) {
             description = VALUES(description)`, [yt_id, title, description])
 }
 async function InsertUploadLimit(yt_id, limit) {
-    await pool.execute(`INSERT INTO upload_limit (yt_id,limit,current_date) 
+    await pool.execute(`INSERT INTO upload_limit (yt_id,\`limit\`,\`current_date\`) 
         VALUES (?,?,?)
           ON DUPLICATE KEY UPDATE
-            limit = VALUES(limit),
-            current_date = VALUES(current_date)`, [yt_id, limit, new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString().split("T")[0]])
+            \`limit\` = VALUES(\`limit\`),
+            \`current_date\` = VALUES(\`current_date\`)`, [yt_id, limit, new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString().split("T")[0]])
 }
 
 async function getSourcesByYTId(yt_id) {
