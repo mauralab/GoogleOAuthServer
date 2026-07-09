@@ -27,7 +27,7 @@ async function InsertGoogleAccount(user_id, tokens, profile) {
 
 async function InsertSource(yt_id, link) {
     await pool.execute(`INSERT INTO tiktok_sources (yt_id,link,last_upload) 
-        VALUES (?,?,?)`, [yt_id, link, new Date(Date.now() + 2 * 60 * 60 * 1000)])
+        VALUES (?,?,?)`, [yt_id, link, new Date(Date.now() + 3 * 60 * 60 * 1000)])
 }
 async function InsertUploadDefaults(yt_id, title,description) {
     await pool.execute(`INSERT INTO upload_defaults (yt_id,title,description) 
