@@ -1,10 +1,10 @@
 const db = require("mysql2/promise");
 
 const pool = db.createPool({
-    host: "sql7.freesqldatabase.com",
-    user: "sql7832546",
-    password: "CCiKNuVXc8",
-    database: "sql7832546",
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
 });
 
 async function InsertGoogleAccount(user_id, tokens, profile) {
