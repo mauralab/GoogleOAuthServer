@@ -1,10 +1,10 @@
 const db = require("mysql2/promise");
 
 const pool = db.createPool({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
+    host: "mysql5036.site4now.net",
+    user: "acc016_tgbot",
+    password: "canon123",
+    database: "db_acc016_tgbot",
 });
 
 async function InsertGoogleAccount(user_id, tokens, profile) {
