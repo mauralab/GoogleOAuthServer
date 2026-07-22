@@ -9,19 +9,27 @@ const pool = db.createPool({
 
 async function InsertGoogleAccount(user_id, tokens, profile) {
     await pool.execute(
-        `INSERT INTO youtube_credentials
-      (user_id, access_token, refresh_token, scope, token_type, expiry_date, google_email, google_name)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-            user_id,
-            tokens.access_token,
-            tokens.refresh_token || null,
-            tokens.scope,
-            tokens.token_type,
-            tokens.expiry_date,
-            profile.email,
-            profile.name,
-        ]
+    `INSERT INTO youtube_credentials
+        (user_id, access_token, refresh_token, scope, token_type, expiry_date, google_email, google_name)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+     ON DUPLICATE KEY UPDATE
+        user_id = VALUES(user_id),
+        access_token = VALUES(access_token),
+        refresh_token = COALESCE(VALUES(refresh_token), refresh_token),
+        scope = VALUES(scope),
+        token_type = VALUES(token_type),
+        expiry_date = VALUES(expiry_date),
+        google_name = VALUES(google_name)`,
+    [
+        user_id,
+        tokens.access_token,
+        tokens.refresh_token ?? null,
+        tokens.scope,
+        tokens.token_type,
+        tokens.expiry_date,
+        profile.email,
+        profile.name,
+    ]
     );
 }
 
