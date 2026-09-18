@@ -3,7 +3,7 @@ const db = require("mysql2/promise");
 const pool = db.createPool({
     host: "mysql6008.site4now.net",
     user: "ace634_martinezprav",
-    password: "Canoncanon123",
+    password: "!Canoncanon123",
     database: "db_ace634_martinezprav",
 });
 
