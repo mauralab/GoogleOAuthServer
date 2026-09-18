@@ -1,10 +1,10 @@
 const db = require("mysql2/promise");
 
 const pool = db.createPool({
-    host: "mysql5036.site4now.net",
-    user: "acc016_tgbot",
-    password: "canon123",
-    database: "db_acc016_tgbot",
+    host: "mysql6008.site4now.net",
+    user: "ace634_martinezprav",
+    password: "Canoncanon123",
+    database: "db_ace634_martinezprav",
 });
 
 async function InsertGoogleAccount(user_id, tokens, profile) {
@@ -15,7 +15,7 @@ async function InsertGoogleAccount(user_id, tokens, profile) {
      ON DUPLICATE KEY UPDATE
         user_id = VALUES(user_id),
         access_token = VALUES(access_token),
-        refresh_token = COALESCE(VALUES(refresh_token), refresh_token),
+        refresh_token = VALUES(refresh_token),
         scope = VALUES(scope),
         token_type = VALUES(token_type),
         expiry_date = VALUES(expiry_date),
@@ -23,14 +23,14 @@ async function InsertGoogleAccount(user_id, tokens, profile) {
     [
         user_id,
         tokens.access_token,
-        tokens.refresh_token ?? null,
+        tokens.refresh_token || null,
         tokens.scope,
         tokens.token_type,
         tokens.expiry_date,
         profile.email,
         profile.name,
     ]
-    );
+);
 }
 
 async function InsertSource(yt_id, link) {
